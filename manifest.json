@@ -1,0 +1,14 @@
+﻿{
+  "name": "每日摄入追踪",
+  "short_name": "摄入追踪",
+  "description": "健身饮食营养素每日摄入追踪工具",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f0f0f",
+  "theme_color": "#0f0f0f",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
