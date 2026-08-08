@@ -1,6 +1,6 @@
 ﻿{
-  "name": "每日摄入追踪",
-  "short_name": "摄入追踪",
+  "name": "Stan's diet",
+  "short_name": "Stan's diet,
   "description": "健身饮食营养素每日摄入追踪工具",
   "start_url": "./index.html",
   "display": "standalone",
