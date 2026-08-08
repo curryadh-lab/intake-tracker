@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "Stan's diet",
+    "sha256_cert_fingerprints": [
+      "78:DF:27:BB:1F:B1:2F:AB:9E:55:EC:22:61:42:18:4B:4F:AF:7E:11:22:B7:41:65:2F:22:93:EA:C3:0C:AE:F9"
+    ]
+  }
+}]
