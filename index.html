@@ -52,6 +52,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;b
 .search-wrap{margin-bottom:8px}
 .search-wrap input{width:100%;padding:8px 10px;background:#252525;border:1px solid #333;border-radius:8px;color:#fff;font-size:13px;outline:none}
 .search-wrap input:focus{border-color:#4ade80}
+.suggestions{position:absolute;top:100%;left:0;right:0;background:#1a1a1a;border:1px solid #333;border-radius:0 0 10px 10px;max-height:280px;overflow-y:auto;z-index:40;display:none}
+.suggestions.show{display:block}
+.suggestion-item{padding:10px 14px;cursor:pointer;font-size:13px;color:#ccc;display:flex;align-items:center;gap:8px;border-bottom:1px solid #2a2a2a}
+.suggestion-item:last-child{border-bottom:none}
+.suggestion-item:hover,.suggestion-item.active{background:#252525;color:#fff}
+.suggestion-item .s-name{flex:1}
+.suggestion-item .s-macros{font-size:11px;color:#666}
+.search-wrap{position:relative}
 .food-list{display:flex;flex-direction:column;gap:4px;max-height:340px;overflow-y:auto}
 .food-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#252525;border-radius:8px;font-size:13px}
 .food-item .fi-name{flex:1;color:#ddd;font-size:13px}
@@ -86,9 +94,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;b
 .add-custom-btn:hover{border-color:#4ade80;color:#4ade80}
 @media(max-width:480px){.summary-grid{grid-template-columns:1fr 1fr}.food-item .fi-macros{font-size:10px}.add-row select{min-width:100px;font-size:12px}}
 
-.splash{position:fixed;inset:0;z-index:9999;background:#0f0f0f;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
+.splash{position:fixed;inset:0;z-index:9999;background:#0f0f0f url(./splash.png) center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
 .splash.hide{opacity:0;pointer-events:none}
-.splash-icon{width:100px;height:100px;border-radius:24px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative}
+.splash-icon{width:100px;height:100px;border-radius:24px;background:rgba(26,26,26,0.7);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative}
 .splash-ring{width:64px;height:64px;border-radius:50%;border:5px solid #333;border-top-color:#4ade80;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .splash-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:6px}
@@ -123,7 +131,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;b
 </div>
 <div class="card">
 <h2>添加食物</h2>
-<div class="search-wrap"><input id="foodSearch" type="text" placeholder="搜索食材..." oninput="renderFoodSelect()"></div>
+<div class="search-wrap"><input id="foodSearch" type="text" placeholder="搜索食材..." oninput="onSearchInput()" onfocus="onSearchInput()" autocomplete="off"><div class="suggestions" id="suggestions"></div></div>
 <div class="add-row">
 <select id="foodSelect" onchange="onFoodChange()"><option value="">-- 选择食物 --</option></select>
 <div class="raw-cooked-toggle hidden" id="rawCookedToggle">
@@ -363,6 +371,49 @@ function renderGoals(){
   document.getElementById("goalBars").innerHTML=h;
 }
 
+function fuzzyMatch(text,query){
+  var t=text.toLowerCase(),q=query.toLowerCase(),qi=0;
+  for(var i=0;i<t.length&&qi<q.length;i++){if(t[i]===q[qi])qi++}
+  return qi===q.length;
+}
+function onSearchInput(){
+  var q=document.getElementById("foodSearch").value.trim();
+  var sug=document.getElementById("suggestions");
+  if(!q){sug.classList.remove("show");renderFoodSelect();return}
+  var matches=[],foods=allFoods();
+  for(var i=0;i<foods.length;i++){
+    var f=foods[i];
+    if(fuzzyMatch(f.name,q)||f.cat.toLowerCase().indexOf(q.toLowerCase())>-1)matches.push({f:f,score:fuzzyScore(f.name,q)});
+  }
+  matches.sort(function(a,b){return a.score-b.score});
+  matches=matches.slice(0,10);
+  if(matches.length===0){sug.classList.remove("show");renderFoodSelect();return}
+  var h="";
+  for(var j=0;j<matches.length;j++){
+    var f=matches[j].f,rc=f.rc==="raw"?"生":f.rc==="cooked"?"熟":"";
+    var nameEscaped=f.name.replace(/'/g,"\'");
+    h+='<div class="suggestion-item" onclick="selectSuggestion(\''+nameEscaped+'\')">';
+    h+='<span class="s-name">'+f.name+'</span>';
+    h+='<span class="s-macros">碳'+f.carbs+' 蛋'+f.protein+' 脂'+f.fat+' | '+f.cat+'</span>';
+    h+='</div>';
+  }
+  sug.innerHTML=h;sug.classList.add("show");renderFoodSelect();
+}
+function fuzzyScore(text,query){
+  var t=text.toLowerCase(),q=query.toLowerCase(),qi=0,score=0;
+  for(var i=0;i<t.length&&qi<q.length;i++){if(t[i]===q[qi]){score+=i;qi++}}
+  return qi===q.length?score:9999;
+}
+function selectSuggestion(name){
+  document.getElementById("foodSearch").value="";
+  document.getElementById("foodSelect").value=name;
+  document.getElementById("suggestions").classList.remove("show");
+  onFoodChange();showToast("已选择: "+name);
+}
+document.addEventListener("click",function(e){
+  var sug=document.getElementById("suggestions"),inp=document.getElementById("foodSearch");
+  if(e.target!==inp&&!sug.contains(e.target))sug.classList.remove("show");
+});
 function renderFoodSelect(){
   var sel=document.getElementById("foodSelect");
   var s=(document.getElementById("foodSearch").value||"").toLowerCase();
