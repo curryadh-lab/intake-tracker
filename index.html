@@ -94,7 +94,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;b
 .add-custom-btn:hover{border-color:#4ade80;color:#4ade80}
 @media(max-width:480px){.summary-grid{grid-template-columns:1fr 1fr}.food-item .fi-macros{font-size:10px}.add-row select{min-width:100px;font-size:12px}}
 
-.splash{position:fixed;inset:0;z-index:9999;background:#0f0f0f url(./splash.png) center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
+.splash{position:fixed;inset:0;z-index:9999;background:#0f0f0f url(./splash.png) center/cover no-repeat;display:flex};flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
 .splash.hide{opacity:0;pointer-events:none}
 .splash-icon{width:100px;height:100px;border-radius:24px;background:rgba(26,26,26,0.7);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative}
 .splash-ring{width:64px;height:64px;border-radius:50%;border:5px solid #333;border-top-color:#4ade80;animation:spin 1s linear infinite}
@@ -178,8 +178,15 @@ var FOOD_DB=[
   {name:"糙米",carbs:75.0,protein:8.0,fat:2.5,cat:"主食",rc:"raw",cooked:{carbs:30.0,protein:3.2,fat:1.0}},
   {name:"面条（挂面）",carbs:70.0,protein:11.0,fat:1.3,cat:"主食",rc:"raw",cooked:{carbs:28.0,protein:4.4,fat:0.5}},
   {name:"意大利面",carbs:71.0,protein:12.0,fat:1.5,cat:"主食",rc:"raw",cooked:{carbs:28.4,protein:4.8,fat:0.6}},
+  {name:"鲜面条（手擀面）",carbs:56.0,protein:8.5,fat:1.0,cat:"主食",rc:"raw",cooked:{carbs:28.0,protein:4.2,fat:0.5}},
+  {name:"刀削面",carbs:58.0,protein:8.0,fat:1.2,cat:"主食",rc:"raw",cooked:{carbs:29.0,protein:4.0,fat:0.6}},
+  {name:"面片",carbs:58.0,protein:8.5,fat:1.0,cat:"主食",rc:"raw",cooked:{carbs:29.0,protein:4.2,fat:0.5}},
+  {name:"河粉/米粉",carbs:33.0,protein:3.0,fat:0.5,cat:"主食",rc:"cooked"},
+  {name:"土豆粉/粉条",carbs:84.0,protein:0.5,fat:0.1,cat:"主食",rc:"raw",cooked:{carbs:33.6,protein:0.2,fat:0.04}},
   {name:"馒头",carbs:47.0,protein:7.0,fat:1.1,cat:"主食",rc:"cooked"},
   {name:"全麦面包",carbs:43.0,protein:9.0,fat:3.5,cat:"主食",rc:"cooked",units:[{name:"片（约50g）",grams:50}]},
+  {name:"大饼/烙饼",carbs:52.0,protein:7.5,fat:2.0,cat:"主食",rc:"cooked"},
+  {name:"烧饼",carbs:58.0,protein:8.0,fat:11.0,cat:"主食",rc:"cooked"},
   {name:"燕麦片",carbs:67.0,protein:12.0,fat:6.7,cat:"主食",rc:"raw",cooked:{carbs:50.0,protein:9.0,fat:5.0}},
   {name:"小米",carbs:73.0,protein:9.0,fat:3.0,cat:"主食",rc:"raw",cooked:{carbs:29.2,protein:3.6,fat:1.2}},
   {name:"藜麦",carbs:64.0,protein:14.0,fat:6.0,cat:"主食",rc:"raw",cooked:{carbs:25.6,protein:5.6,fat:2.4}},
@@ -193,23 +200,39 @@ var FOOD_DB=[
   {name:"玉米（甜）",carbs:22.8,protein:3.5,fat:1.2,cat:"薯类",units:[{name:"根（约300g）",grams:300}]},
   {name:"藕",carbs:16.4,protein:1.9,fat:0.2,cat:"薯类"},
   {name:"鸡胸肉",carbs:0.5,protein:24.6,fat:1.9,cat:"肉类",rc:"raw",cooked:{carbs:0.7,protein:33.0,fat:2.6},units:[{name:"块（约200g）",grams:200}]},
-  {name:"鸡腿肉（去皮）",carbs:0,protein:20.0,fat:5.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:27.0,fat:6.5},units:[{name:"大只（约220g）",grams:220},{name:"小只（约130g）",grams:130}]},
-  {name:"鸡腿肉（带皮）",carbs:0,protein:19.0,fat:13.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:25.0,fat:17.0},units:[{name:"大只（约250g）",grams:250},{name:"小只（约150g）",grams:150}]},
+  {name:"鸡腿（去皮）",carbs:0,protein:20.0,fat:5.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:27.0,fat:6.5},units:[{name:"大只（约220g）",grams:220},{name:"小只（约130g）",grams:130}]},
+  {name:"鸡腿（带皮）",carbs:0,protein:19.0,fat:13.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:25.0,fat:17.0},units:[{name:"大只（约250g）",grams:250},{name:"小只（约150g）",grams:150}]},
   {name:"鸡翅",carbs:0.5,protein:18.0,fat:12.0,cat:"肉类",rc:"raw",cooked:{carbs:0.7,protein:24.0,fat:16.0},units:[{name:"只（约50g）",grams:50}]},
+  {name:"鸡胗",carbs:2.0,protein:19.0,fat:2.8,cat:"肉类",rc:"raw",cooked:{carbs:2.6,protein:25.0,fat:3.7}},
+  {name:"鸡心",carbs:1.0,protein:15.0,fat:8.0,cat:"肉类",rc:"raw",cooked:{carbs:1.3,protein:20.0,fat:10.5}},
   {name:"鸭腿（去皮）",carbs:0.5,protein:18.0,fat:8.0,cat:"肉类",rc:"raw",cooked:{carbs:0.7,protein:24.0,fat:10.5},units:[{name:"只（约250g）",grams:250}]},
+  {name:"鸭胸肉",carbs:0.5,protein:21.0,fat:3.0,cat:"肉类",rc:"raw",cooked:{carbs:0.7,protein:28.0,fat:4.0}},
   {name:"猪里脊",carbs:1.5,protein:20.2,fat:7.9,cat:"肉类",rc:"raw",cooked:{carbs:2.0,protein:27.0,fat:10.5}},
   {name:"猪五花肉",carbs:1.2,protein:9.5,fat:37.0,cat:"肉类",rc:"raw",cooked:{carbs:1.6,protein:12.5,fat:48.0}},
   {name:"猪排骨",carbs:0,protein:17.0,fat:23.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:22.5,fat:30.0},units:[{name:"根（约30g）",grams:30}]},
+  {name:"猪蹄",carbs:0,protein:22.0,fat:19.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:29.0,fat:25.0}},
   {name:"牛肉（牛腱）",carbs:1.2,protein:19.9,fat:4.2,cat:"肉类",rc:"raw",cooked:{carbs:1.6,protein:26.5,fat:5.6}},
   {name:"牛肉（肥牛）",carbs:0.8,protein:18.0,fat:20.0,cat:"肉类",rc:"raw",cooked:{carbs:1.0,protein:24.0,fat:26.5},units:[{name:"片（约25g）",grams:25}]},
+  {name:"牛腩",carbs:0,protein:17.0,fat:20.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:22.5,fat:26.5}},
+  {name:"牛里脊",carbs:1.0,protein:22.0,fat:2.0,cat:"肉类",rc:"raw",cooked:{carbs:1.3,protein:29.0,fat:2.6}},
   {name:"羊肉",carbs:0,protein:19.0,fat:14.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:25.0,fat:18.5}},
+  {name:"培根",carbs:1.0,protein:12.0,fat:42.0,cat:"肉类",rc:"cooked",units:[{name:"片（约15g）",grams:15}]},
   {name:"三文鱼",carbs:0,protein:20.0,fat:13.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:26.5,fat:17.0},units:[{name:"块（约150g）",grams:150}]},
   {name:"海鱼（平均）",carbs:0.1,protein:17.5,fat:4.0,cat:"肉类",rc:"raw",cooked:{carbs:0.1,protein:23.0,fat:5.3},units:[{name:"条（约400g）",grams:400}]},
+  {name:"带鱼",carbs:0,protein:17.7,fat:4.9,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:23.5,fat:6.5}},
+  {name:"鲈鱼",carbs:0,protein:18.6,fat:3.4,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:24.5,fat:4.5}},
+  {name:"鳕鱼",carbs:0,protein:20.0,fat:0.5,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:26.5,fat:0.7}},
   {name:"鲜虾",carbs:0.5,protein:18.6,fat:0.8,cat:"肉类",rc:"raw",cooked:{carbs:0.7,protein:24.5,fat:1.0},units:[{name:"只（约15g）",grams:15}]},
   {name:"鱿鱼",carbs:0,protein:17.0,fat:0.8,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:22.5,fat:1.0}},
+  {name:"蛤蜊/花甲",carbs:2.8,protein:10.0,fat:1.1,cat:"肉类",rc:"raw",cooked:{carbs:2.8,protein:13.0,fat:1.4}},
+  {name:"螃蟹",carbs:2.3,protein:17.5,fat:2.5,cat:"肉类",rc:"raw",cooked:{carbs:2.3,protein:23.0,fat:3.3}},
   {name:"猪肝",carbs:5.0,protein:19.0,fat:3.5,cat:"肉类",rc:"raw",cooked:{carbs:6.5,protein:25.0,fat:4.6}},
   {name:"西兰花",carbs:4.3,protein:4.1,fat:0.6,cat:"蔬菜"},
+  {name:"花菜",carbs:4.0,protein:2.0,fat:0.3,cat:"蔬菜"},
   {name:"菠菜",carbs:3.6,protein:2.6,fat:0.3,cat:"蔬菜"},
+  {name:"油菜",carbs:2.7,protein:1.8,fat:0.2,cat:"蔬菜"},
+  {name:"空心菜",carbs:3.6,protein:2.2,fat:0.3,cat:"蔬菜"},
+  {name:"韭菜",carbs:3.2,protein:2.4,fat:0.4,cat:"蔬菜"},
   {name:"番茄",carbs:3.3,protein:0.9,fat:0.2,cat:"蔬菜",units:[{name:"个（约200g）",grams:200}]},
   {name:"黄瓜",carbs:2.5,protein:0.8,fat:0.2,cat:"蔬菜",units:[{name:"根（约200g）",grams:200}]},
   {name:"生菜",carbs:1.5,protein:1.3,fat:0.3,cat:"蔬菜"},
@@ -217,21 +240,42 @@ var FOOD_DB=[
   {name:"芹菜",carbs:3.3,protein:0.8,fat:0.1,cat:"蔬菜"},
   {name:"胡萝卜",carbs:8.8,protein:1.0,fat:0.2,cat:"蔬菜",units:[{name:"根（约150g）",grams:150}]},
   {name:"青椒",carbs:4.6,protein:1.0,fat:0.2,cat:"蔬菜",units:[{name:"个（约100g）",grams:100}]},
-  {name:"蘑菇",carbs:3.3,protein:2.7,fat:0.5,cat:"蔬菜"},
-  {name:"豆芽",carbs:2.6,protein:2.1,fat:0.3,cat:"蔬菜"},
+  {name:"苦瓜",carbs:3.5,protein:1.0,fat:0.1,cat:"蔬菜"},
+  {name:"丝瓜",carbs:3.6,protein:1.0,fat:0.2,cat:"蔬菜"},
+  {name:"冬瓜",carbs:1.9,protein:0.4,fat:0.2,cat:"蔬菜"},
   {name:"茄子",carbs:4.9,protein:1.1,fat:0.2,cat:"蔬菜",units:[{name:"根（约250g）",grams:250}]},
+  {name:"西葫芦",carbs:3.8,protein:0.8,fat:0.2,cat:"蔬菜"},
   {name:"洋葱",carbs:9.0,protein:1.1,fat:0.1,cat:"蔬菜",units:[{name:"个（约200g）",grams:200}]},
+  {name:"蘑菇",carbs:3.3,protein:2.7,fat:0.5,cat:"蔬菜"},
+  {name:"木耳",carbs:2.0,protein:1.5,fat:0.2,cat:"蔬菜"},
+  {name:"海带",carbs:2.0,protein:1.2,fat:0.1,cat:"蔬菜"},
+  {name:"豆芽",carbs:2.6,protein:2.1,fat:0.3,cat:"蔬菜"},
+  {name:"荷兰豆",carbs:4.9,protein:2.5,fat:0.3,cat:"蔬菜"},
+  {name:"豇豆/豆角",carbs:5.0,protein:2.5,fat:0.2,cat:"蔬菜"},
+  {name:"莴笋",carbs:2.8,protein:1.0,fat:0.1,cat:"蔬菜"},
+  {name:"紫甘蓝",carbs:6.2,protein:1.5,fat:0.2,cat:"蔬菜"},
   {name:"秋葵",carbs:7.5,protein:2.0,fat:0.2,cat:"蔬菜"},
   {name:"芦笋",carbs:3.9,protein:2.2,fat:0.2,cat:"蔬菜"},
   {name:"香蕉",carbs:22.0,protein:1.4,fat:0.2,cat:"水果",units:[{name:"大根（约150g）",grams:150},{name:"小根（约100g）",grams:100}]},
   {name:"苹果",carbs:13.5,protein:0.2,fat:0.2,cat:"水果",units:[{name:"大个（约250g）",grams:250},{name:"小个（约180g）",grams:180}]},
+  {name:"梨",carbs:13.3,protein:0.4,fat:0.1,cat:"水果",units:[{name:"大个（约300g）",grams:300},{name:"小个（约200g）",grams:200}]},
+  {name:"桃子",carbs:10.1,protein:0.9,fat:0.1,cat:"水果",units:[{name:"个（约250g）",grams:250}]},
+  {name:"猕猴桃",carbs:14.5,protein:1.1,fat:0.5,cat:"水果",units:[{name:"个（约80g）",grams:80}]},
   {name:"蓝莓",carbs:14.5,protein:0.7,fat:0.3,cat:"水果"},
-  {name:"牛油果",carbs:8.5,protein:2.0,fat:15.0,cat:"水果",units:[{name:"个（约150g）",grams:150}]},
-  {name:"橙子",carbs:11.1,protein:0.8,fat:0.2,cat:"水果",units:[{name:"大个（约250g）",grams:250},{name:"小个（约180g）",grams:180}]},
   {name:"草莓",carbs:7.1,protein:0.7,fat:0.3,cat:"水果",units:[{name:"颗（约25g）",grams:25}]},
+  {name:"樱桃",carbs:10.2,protein:1.1,fat:0.2,cat:"水果",units:[{name:"颗（约5g）",grams:5}]},
   {name:"葡萄",carbs:10.3,protein:0.5,fat:0.2,cat:"水果",units:[{name:"颗（约8g）",grams:8}]},
+  {name:"橙子",carbs:11.1,protein:0.8,fat:0.2,cat:"水果",units:[{name:"大个（约250g）",grams:250},{name:"小个（约180g）",grams:180}]},
+  {name:"柚子",carbs:9.5,protein:0.8,fat:0.2,cat:"水果"},
+  {name:"芒果",carbs:15.0,protein:0.8,fat:0.4,cat:"水果",units:[{name:"个（约300g）",grams:300}]},
+  {name:"菠萝",carbs:10.8,protein:0.5,fat:0.1,cat:"水果"},
+  {name:"哈密瓜",carbs:7.9,protein:0.5,fat:0.1,cat:"水果"},
+  {name:"木瓜",carbs:7.0,protein:0.5,fat:0.1,cat:"水果"},
   {name:"西瓜",carbs:5.5,protein:0.5,fat:0.1,cat:"水果",units:[{name:"片（约300g）",grams:300}]},
   {name:"火龙果",carbs:13.0,protein:1.1,fat:0.4,cat:"水果",units:[{name:"个（约400g）",grams:400}]},
+  {name:"牛油果",carbs:8.5,protein:2.0,fat:15.0,cat:"水果",units:[{name:"个（约150g）",grams:150}]},
+  {name:"榴莲",carbs:27.0,protein:1.5,fat:5.3,cat:"水果"},
+  {name:"冬枣",carbs:27.8,protein:1.2,fat:0.3,cat:"水果"},
   {name:"鸡蛋（全蛋）",carbs:0.8,protein:13.3,fat:8.8,cat:"蛋奶",units:[{name:"个（约50g）",grams:50}]},
   {name:"鸡蛋白",carbs:0.7,protein:11.6,fat:0.1,cat:"蛋奶",units:[{name:"个（约33g）",grams:33}]},
   {name:"牛奶（全脂）",carbs:3.4,protein:3.0,fat:3.6,cat:"蛋奶",units:[{name:"杯250ml",grams:250}]},
@@ -253,14 +297,17 @@ var FOOD_DB=[
   {name:"橄榄油",carbs:0,protein:0,fat:100,cat:"油脂",units:[{name:"汤匙（约10g）",grams:10}]},
   {name:"花生油",carbs:0,protein:0,fat:100,cat:"油脂",units:[{name:"汤匙（约10g）",grams:10}]},
   {name:"蜂蜜",carbs:82.0,protein:0.3,fat:0,cat:"调味",units:[{name:"汤匙（约20g）",grams:20}]},
-  {name:"花生酱",carbs:20.0,protein:25.0,fat:50.0,cat:"调味",units:[{name:"汤匙（约15g）",grams:15}]}
+  {name:"花生酱",carbs:20.0,protein:25.0,fat:50.0,cat:"调味",units:[{name:"汤匙（约15g）",grams:15}]},
+  {name:"蛋白粉（乳清）",carbs:5.0,protein:75.0,fat:5.0,cat:"补剂",units:[{name:"勺（约30g）",grams:30}]},
+  {name:"蛋白粉（酪蛋白）",carbs:3.0,protein:80.0,fat:2.0,cat:"补剂",units:[{name:"勺（约30g）",grams:30}]},
+  {name:"肌酸",carbs:0,protein:0,fat:0,cat:"补剂",units:[{name:"勺（约5g）",grams:5}]}
 ];
 
 var CUSTOM_KEY="cfv2",STORAGE_KEY="div2",GOAL_KEY="dgv2";
 function loadCustom(){try{return JSON.parse(localStorage.getItem(CUSTOM_KEY)||"[]")}catch(e){return[]}}
 function saveCustom(f){localStorage.setItem(CUSTOM_KEY,JSON.stringify(f))}
 function allFoods(){return FOOD_DB.concat(loadCustom())}
-function getToday(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function getToday(){var d=new Date(),m=d.getMonth()+1,dt=d.getDate();return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(dt<10?"0":"")+dt}
 function loadData(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return{}}}
 function saveData(d){localStorage.setItem(STORAGE_KEY,JSON.stringify(d))}
 function loadGoals(){var g=null;try{g=JSON.parse(localStorage.getItem(GOAL_KEY))}catch(e){}return g||{carbs:250,protein:150,fat:60,calories:2200}}
@@ -437,8 +484,7 @@ function renderFoodSelect(){
     for(var k=0;k<cfs.length;k++){
       var f=cfs[k];
       var label=f.name;
-      if(f.rc==="raw")label+=" (生重)";
-      else if(f.rc==="cooked")label+=" (熟重)";
+      if(f.rc==="raw"||f.rc==="cooked")label+="";
       h+='<option value="'+f.name+'">'+label+'</option>';
     }
     h+='</optgroup>';
@@ -518,7 +564,7 @@ function addFood(){
   curFood=null;
   updateToggle();
   renderAll();
-setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},400);
+setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},200);
   showToast("已添加 "+food.name+" "+amount+"g");
 }
 
@@ -528,7 +574,7 @@ function removeFood(idx){
   items.splice(idx,1);
   setTodayItems(items);
   renderAll();
-setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},400);
+setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},200);
   showToast("已移除 "+rm.name);
 }
 
@@ -536,7 +582,7 @@ function resetToday(){
   if(!confirm("确定清空今天所有记录？"))return;
   setTodayItems([]);
   renderAll();
-setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},400);
+setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},200);
   showToast("已清空");
 }
 
@@ -561,7 +607,7 @@ function saveGoals(){
   saveGoalsStore(g);
   document.getElementById("goalEditForm").classList.remove("show");
   renderAll();
-setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},400);
+setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},200);
   showToast("目标已更新");
 }
 
@@ -662,9 +708,10 @@ function toggleHistory(date) {
 
 // renderAll updated above
 
+document.addEventListener("click",function(){var s=document.getElementById("splash");if(s&&!s.classList.contains("hide")){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}});
 if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js")}
 renderAll();
-setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},400);
+setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},200);
 </script>
 </body>
 </html>
