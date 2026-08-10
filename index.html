@@ -143,7 +143,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;b
 </div>
 <div class="food-list" id="foodList"></div>
 <div class="empty-state" id="emptyState">还没有记录，开始添加食物吧</div>
-<div class="add-custom-row"><button class="add-custom-btn" onclick="showCustomModal()">+ 自定义食材</button></div>
+<div class="add-custom-row"><button class="add-custom-btn" onclick="showCustomModal()">+ 自定义食材</button> <button class="add-custom-btn" onclick="showManageModal()">管理自定义</button></div>
 </div>
 <div class="card">
 <h2>今日汇总</h2>
@@ -171,6 +171,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;b
 </div>
 </div>
 </div>
+<div class="modal-overlay" id="manageModal">
+<div class="modal-box">
+<h3>管理自定义食材</h3>
+<div id="manageList" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;"></div>
+<div class="modal-btns"><button class="btn-cancel" onclick="hideManageModal()">关闭</button></div>
+</div>
+</div>
 <div class="toast" id="toast"></div>
 <script>
 var FOOD_DB=[
@@ -183,7 +190,7 @@ var FOOD_DB=[
   {name:"面片",carbs:58.0,protein:8.5,fat:1.0,cat:"主食",rc:"raw",cooked:{carbs:29.0,protein:4.2,fat:0.5}},
   {name:"河粉/米粉",carbs:33.0,protein:3.0,fat:0.5,cat:"主食",rc:"cooked"},
   {name:"土豆粉/粉条",carbs:84.0,protein:0.5,fat:0.1,cat:"主食",rc:"raw",cooked:{carbs:33.6,protein:0.2,fat:0.04}},
-  {name:"馒头",carbs:47.0,protein:7.0,fat:1.1,cat:"主食",rc:"cooked"},
+  {name:"馒头",carbs:47.0,protein:7.0,fat:1.1,cat:"主食",rc:"cooked",units:[{name:"大个（约150g）",grams:150},{name:"中个（约100g）",grams:100},{name:"小个（约60g）",grams:60}]},
   {name:"全麦面包",carbs:43.0,protein:9.0,fat:3.5,cat:"主食",rc:"cooked",units:[{name:"2片（约100g）",grams:100},{name:"1.5片（约75g）",grams:75},{name:"1片（约50g）",grams:50}]},
   {name:"大饼/烙饼",carbs:52.0,protein:7.5,fat:2.0,cat:"主食",rc:"cooked"},
   {name:"烧饼",carbs:58.0,protein:8.0,fat:11.0,cat:"主食",rc:"cooked"},
@@ -215,7 +222,9 @@ var FOOD_DB=[
   {name:"猪排骨",carbs:0,protein:17.0,fat:23.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:22.5,fat:30.0},units:[{name:"大根（约40g）",grams:40},{name:"中根（约30g）",grams:30},{name:"小根（约20g）",grams:20}]},
   {name:"猪蹄",carbs:0,protein:22.0,fat:19.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:29.0,fat:25.0}},
   {name:"牛肉（牛腱）",carbs:1.2,protein:19.9,fat:4.2,cat:"肉类",rc:"raw",cooked:{carbs:1.6,protein:26.5,fat:5.6}},
-  {name:"牛肉（肥牛）",carbs:0.8,protein:18.0,fat:20.0,cat:"肉类",rc:"raw",cooked:{carbs:1.0,protein:24.0,fat:26.5},units:[{name:"大片（约35g）",grams:35},{name:"中片（约25g）",grams:25},{name:"小片（约15g）",grams:15}]},
+  {name:"牛肉（肥牛）",carbs:0.8,protein:18.0,fat:20.0,cat:"肉类",rc:"raw",cooked:{carbs:1.0,protein:24.0,fat:26.5},units:[{name:"大片（约35g）",grams:35},{name:"中片（约25g）",grams:25},{name:"小片（约15g）",grams:15}]},  {name:"猪瘦肉",carbs:1.5,protein:20.3,fat:6.2,cat:"肉类",rc:"raw",cooked:{carbs:2.0,protein:27.0,fat:8.2}},
+  {name:"护心肉",carbs:1.0,protein:20.0,fat:5.0,cat:"肉类",rc:"raw",cooked:{carbs:1.3,protein:26.5,fat:6.6}},
+
   {name:"牛腩",carbs:0,protein:17.0,fat:20.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:22.5,fat:26.5}},
   {name:"牛里脊",carbs:1.0,protein:22.0,fat:2.0,cat:"肉类",rc:"raw",cooked:{carbs:1.3,protein:29.0,fat:2.6}},
   {name:"羊肉",carbs:0,protein:19.0,fat:14.0,cat:"肉类",rc:"raw",cooked:{carbs:0,protein:25.0,fat:18.5}},
@@ -318,7 +327,9 @@ function saveGoalsStore(g){localStorage.setItem(GOAL_KEY,JSON.stringify(g))}
 function getTodayItems(){var items=loadData()[getToday()]||[];for(var i=0;i<items.length;i++){var it=items[i];if(!it.rc)it.rc="raw";if(!it.wm)it.wm="raw"}return items}
 function setTodayItems(items){var d=loadData();d[getToday()]=items;saveData(d)}
 function calcCal(c,p,f){return Math.round(c*4+p*4+f*9)}
-function calcTotals(items){var c=0,p=0,f=0;for(var i=0;i<items.length;i++){var it=items[i];var r=it.amount/100;c+=it.carbs*r;p+=it.protein*r;f+=it.fat*r}return{carbs:Math.round(c*10)/10,protein:Math.round(p*10)/10,fat:Math.round(f*10)/10,calories:calcCal(c,p,f)}}
+var PROTEIN_CATS=["肉类","蛋奶","豆类","补剂"];
+function isAnimalProtein(foodName){var all=allFoods();for(var i=0;i<all.length;i++){if(all[i].name===foodName){return PROTEIN_CATS.indexOf(all[i].cat)>-1}}return false}
+function calcTotals(items){var c=0,p=0,ap=0,f=0;for(var i=0;i<items.length;i++){var it=items[i];var r=it.amount/100;c+=it.carbs*r;var pp=it.protein*r;p+=pp;if(isAnimalProtein(it.name))ap+=pp;f+=it.fat*r}return{carbs:Math.round(c*10)/10,protein:Math.round(ap*10)/10,proteinTotal:Math.round(p*10)/10,fat:Math.round(f*10)/10,calories:calcCal(c,p,f)}}
 
 var curFood=null;
 var weightMode="raw";
@@ -406,9 +417,10 @@ function renderDate(){
 function renderGoals(){
   var goals=loadGoals();
   var totals=calcTotals(getTodayItems());
+  var protLabel=totals.protein!==totals.proteinTotal?totals.protein+" ("+totals.proteinTotal+")":"";
   var bars=[
     {label:"碳水",cls:"c",val:totals.carbs,goal:goals.carbs,unit:"g"},
-    {label:"蛋白质",cls:"p",val:totals.protein,goal:goals.protein,unit:"g"},
+    {label:"蛋白质",cls:"p",val:totals.protein,goal:goals.protein,unit:"g",extra:protLabel},
     {label:"脂肪",cls:"f",val:totals.fat,goal:goals.fat,unit:"g"},
     {label:"热量",cls:"k",val:totals.calories,goal:goals.calories,unit:"kcal"}
   ];
@@ -416,7 +428,7 @@ function renderGoals(){
   for(var i=0;i<bars.length;i++){
     var b=bars[i];
     var pct=Math.min(b.val/b.goal*100,100);
-    h+='<div class="goal-row"><div class="goal-label">'+b.label+'</div><div class="goal-bar-wrap"><div class="goal-bar '+b.cls+'" style="width:'+pct+'%"></div></div><div class="goal-val"><span>'+b.val+'</span> / '+b.goal+' '+b.unit+'</div></div>';
+    h+='<div class="goal-row"><div class="goal-label">'+b.label+'</div><div class="goal-bar-wrap"><div class="goal-bar '+b.cls+'" style="width:'+pct+'%"></div></div><div class="goal-val"><span>'+b.val+'</span>'+(b.extra?' <small style=color:#666>'+b.extra+'</small>':'')+' / '+b.goal+' '+b.unit+'</div></div>';
   }
   document.getElementById("goalBars").innerHTML=h;
 }
@@ -521,9 +533,11 @@ function renderFoodList(){
 function renderSummary(){
   var goals=loadGoals();
   var totals=calcTotals(getTodayItems());
+  var pLabel="蛋白质";
+  if(totals.protein!==totals.proteinTotal)pLabel="动物蛋白";
   var items=[
     {label:"碳水",val:totals.carbs,unit:"g",goal:goals.carbs},
-    {label:"蛋白质",val:totals.protein,unit:"g",goal:goals.protein},
+    {label:pLabel,val:totals.protein,unit:"g",goal:goals.protein},
     {label:"脂肪",val:totals.fat,unit:"g",goal:goals.fat},
     {label:"热量",val:totals.calories,unit:"kcal",goal:goals.calories}
   ];
@@ -712,6 +726,39 @@ function toggleHistory(date) {
 // renderAll updated above
 
 document.addEventListener("click",function(){var s=document.getElementById("splash");if(s&&!s.classList.contains("hide")){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}});
+function showManageModal(){
+  var cf=loadCustom(),h="";
+  if(cf.length===0){h='<div class="empty-state" style=padding:20px>没有自定义食材</div>'}
+  for(var i=0;i<cf.length;i++){
+    var f=cf[i];
+    h+='<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#252525;border-radius:8px;font-size:13px">';
+    h+='<span style="flex:1;color:#ddd">'+f.name+'</span>';
+    h+='<span style="color:#666;font-size:11px">碳'+f.carbs+' 蛋'+f.protein+' 脂'+f.fat+' | '+f.cat+'</span>';
+    h+='<button onclick="editCustom('+i+')" style="background:none;border:1px solid #444;color:#aaa;padding:3px 8px;border-radius:4px;cursor:pointer;font-size:11px">编辑</button>';
+    h+='<button onclick="deleteCustom('+i+')" style="background:none;border:1px solid #444;color:#ef4444;padding:3px 8px;border-radius:4px;cursor:pointer;font-size:11px">删</button>';
+    h+='</div>';
+  }
+  document.getElementById("manageList").innerHTML=h;
+  document.getElementById("manageModal").classList.add("show");
+}
+function hideManageModal(){document.getElementById("manageModal").classList.remove("show")}
+function deleteCustom(idx){
+  var cf=loadCustom(),rm=cf[idx];cf.splice(idx,1);saveCustom(cf);
+  showManageModal();renderFoodSelect();showToast("已删除: "+rm.name);
+}
+function editCustom(idx){
+  var cf=loadCustom(),f=cf[idx];
+  document.getElementById("custName").value=f.name;
+  document.getElementById("custCarbs").value=f.carbs;
+  document.getElementById("custProtein").value=f.protein;
+  document.getElementById("custFat").value=f.fat;
+  document.getElementById("custCat").value=f.cat||"自定义";
+  cf.splice(idx,1);saveCustom(cf);
+  hideManageModal();
+  document.getElementById("customModal").classList.add("show");
+  showToast("修改后点添加保存");
+}
+
 if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js")}
 renderAll();
 setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},200);
