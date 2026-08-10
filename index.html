@@ -1,14 +1,14 @@
-﻿<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<link rel="manifest" href="manifest.json?v=999" />
-<link rel="apple-touch-icon" href="./icon-192.png" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<meta name="apple-mobile-web-app-title" content="Stan's diet" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>每日摄入追踪</title>
+<title>Stan's diet</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="摄入追踪">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;background:#0f0f0f;color:#e0e0e0;min-height:100vh;display:flex;justify-content:center;padding:16px}
@@ -577,7 +577,5 @@ if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js")}
 renderAll();
 setTimeout(function(){var s=document.getElementById("splash");if(s){s.classList.add("hide");setTimeout(function(){s.style.display="none"},500)}},400);
 </script>
-</body>
-</html>
 </body>
 </html>
