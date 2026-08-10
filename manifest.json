@@ -1,7 +1,7 @@
 {
-  "name": "Stan's diet",
-  "short_name": "Stan's diet"",
-  "description": "健身饮食营养素每日摄入追踪工具",
+  "name": "Daily Intake Tracker",
+  "short_name": "Intake Tracker",
+  "description": "Fitness nutrition daily intake tracking tool",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
