@@ -131,14 +131,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;b
 </div>
 <div class="card">
 <h2>添加食物</h2>
-<div class="search-wrap"><input id="foodSearch" type="text" placeholder="搜索食材..." oninput="onSearchInput()" onfocus="onSearchInput()" autocomplete="off"><div class="suggestions" id="suggestions"></div></div>
+<div class="search-wrap"><input id="foodSearch" type="search" placeholder="搜索食材..." oninput="onSearchInput()" onfocus="onSearchInput()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="food-search-input"><div class="suggestions" id="suggestions"></div></div>
 <div class="add-row">
 <select id="foodSelect" onchange="onFoodChange()"><option value="">-- 选择食物 --</option></select>
 <div class="raw-cooked-toggle hidden" id="rawCookedToggle">
 <button id="btnRaw" class="active" onclick="setWeightMode('raw')">生重</button>
 <button id="btnCooked" onclick="setWeightMode('cooked')">熟重</button>
 </div>
-<input id="foodAmount" type="number" placeholder="克" value="100" min="1"><select class="unit-select hidden" id="unitSelect" onchange="onUnitChange()"><option value="g">按克数</option></select>
+<input id="foodAmount" type="number" placeholder="克" value="100" min="1" autocomplete="off" inputmode="numeric"><select class="unit-select hidden" id="unitSelect" onchange="onUnitChange()"><option value="g">按克数</option></select>
 <button class="add-btn" onclick="addFood()">+</button>
 </div>
 <div class="food-list" id="foodList"></div>
@@ -160,7 +160,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;b
 <div class="modal-overlay" id="customModal">
 <div class="modal-box">
 <h3>自定义食材</h3>
-<div class="field"><label>名称</label><input id="custName" placeholder="如：蛋白粉"></div>
+<div class="field"><label>名称</label><input id="custName" placeholder="如：蛋白粉" autocomplete="off" autocorrect="off"></div>
 <div class="field"><label>碳水 g</label><input id="custCarbs" type="number" value="0" step="0.1"></div>
 <div class="field"><label>蛋白质 g</label><input id="custProtein" type="number" value="0" step="0.1"></div>
 <div class="field"><label>脂肪 g</label><input id="custFat" type="number" value="0" step="0.1"></div>
